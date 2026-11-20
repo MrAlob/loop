@@ -1,3 +1,4 @@
+import { AUTH_URL } from './api.js'
 const form = document.querySelector('#login')
 const button = form.querySelector('button')
 const status = document.querySelector('#login-status')
@@ -9,7 +10,7 @@ form.addEventListener('submit', async event => {
   status.textContent = 'Logging in…'
 
   try {
-    const response = await fetch('https://v2.api.noroff.dev/auth/login', {
+    const response = await fetch(`${AUTH_URL}/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(Object.fromEntries(new FormData(form))),

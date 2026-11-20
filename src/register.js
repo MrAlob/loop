@@ -1,3 +1,4 @@
+import { AUTH_URL } from './api.js'
 const form = document.querySelector('#register')
 const button = form.querySelector('button')
 const status = document.querySelector('#status')
@@ -16,7 +17,7 @@ form.addEventListener('submit', async event => {
 
   try {
     // Form field names match the three properties expected by Noroff.
-    const response = await fetch('https://v2.api.noroff.dev/auth/register', {
+    const response = await fetch(`${AUTH_URL}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(Object.fromEntries(new FormData(form))),

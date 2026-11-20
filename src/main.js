@@ -1,3 +1,4 @@
+import { PROFILES_URL } from './api.js'
 import './style.css'
 import { setupCreateForm } from './create.js'
 import { showProfile, showAccount } from './profile.js'
@@ -74,7 +75,7 @@ function endSession(destination) {
 
 // Use the same session and API key for profile and bid requests.
 async function getProfileData(path, changes) {
-  const response = await fetch('https://v2.api.noroff.dev/auction/profiles/' + encodeURIComponent(name) + path, {
+  const response = await fetch(`${PROFILES_URL}/${encodeURIComponent(name)}${path}`, {
     method: changes ? 'PUT' : 'GET',
     body: changes ? JSON.stringify(changes) : undefined,
     headers: {

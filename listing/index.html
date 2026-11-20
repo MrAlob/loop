@@ -23,6 +23,17 @@
               <strong id="amount" class="text-2xl"></strong>
               <p class="mt-3"><span id="deadline-label">Ends</span> <time id="deadline"></time></p>
             </div>
+            <div id="owner-actions" hidden>
+              <button id="edit-listing" class="rounded-full bg-[var(--forest)] px-5 py-2 font-semibold text-white">Edit listing</button>
+              <button id="delete-listing" class="ml-3 underline">Delete listing</button>
+            </div>
+            <dialog id="confirm-delete" aria-labelledby="delete-heading" class="m-auto w-[min(92%,28rem)] rounded-3xl bg-[var(--cream)] p-7 text-[var(--forest)] backdrop:bg-black/50">
+              <h2 id="delete-heading" class="font-serif text-3xl">Delete this listing?</h2>
+              <p class="my-4">This removes the listing and its bid history. This action cannot be undone.</p>
+              <p id="delete-error" role="alert"></p>
+              <button id="keep" autofocus class="rounded-full border px-4 py-2">Keep listing</button>
+              <button id="remove" class="rounded-full bg-[var(--forest)] px-5 py-2 text-white">Delete</button>
+            </dialog>
             <section>
               <h2 class="mb-2 font-serif text-2xl">Bid history</h2>
               <p id="empty">No bids yet.</p>
