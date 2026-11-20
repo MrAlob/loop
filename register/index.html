@@ -9,9 +9,38 @@
     <a class="sr-only focus:not-sr-only" href="#main">Skip to content</a>
     <header></header>
     <main id="main" tabindex="-1" class="py-12">
-      <h1 class="mb-4 font-serif text-4xl">Create account</h1>
-      <p>This page is a layout placeholder.</p>
+      <section class="mx-auto max-w-md rounded-3xl border border-[#d9ddcf] bg-white p-6 sm:p-8">
+        <h1 class="font-serif text-4xl">Join the loop.</h1>
+        <p class="mt-2">Use your Noroff student email to create an account.</p>
+        <form id="register" method="post" class="my-6 grid gap-5">
+          <div>
+            <label for="username" class="font-semibold">Username</label>
+            <input id="username" name="name" autocomplete="username" required pattern="[A-Za-z0-9_]+"
+              aria-describedby="name-hint" class="mt-1 w-full rounded-xl border p-3" />
+            <small id="name-hint">Use letters, numbers, or underscores.</small>
+          </div>
+          <div>
+            <label for="email" class="font-semibold">Student email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required
+              pattern="[^@]+@stud\.noroff\.no"
+              aria-describedby="email-hint" class="mt-1 w-full rounded-xl border p-3" />
+            <small id="email-hint">Use an address ending in @stud.noroff.no.</small>
+          </div>
+          <div>
+            <label for="password" class="font-semibold">Password</label>
+            <input id="password" name="password" type="password" autocomplete="new-password"
+              required minlength="8" aria-describedby="password-hint" class="mt-1 w-full rounded-xl border p-3" />
+            <small id="password-hint">Use at least 8 characters.</small>
+          </div>
+          <button class="rounded-full bg-[#173d30] p-3 font-semibold text-white disabled:opacity-60">
+            Create student account
+          </button>
+        </form>
+        <p id="status" role="status"></p>
+        <p class="mt-4">Already have an account? <a href="/login/" class="font-semibold underline">Log in</a></p>
+      </section>
     </main>
     <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/register.js"></script>
   </body>
 </html>
