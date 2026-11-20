@@ -3,7 +3,7 @@ import formHtml from './create-form.html?raw'
 
 export function setupCreateForm() {
   const page = document.querySelector('#create-page')
-  const trigger = document.querySelector('#sell-item')
+  let opener
   const dialog = document.createElement('dialog')
   dialog.id = 'sell-dialog'
   dialog.setAttribute('aria-labelledby', 'listing-heading')
@@ -14,12 +14,18 @@ export function setupCreateForm() {
   const card = container.firstElementChild
   card.querySelector('form').addEventListener('submit', event => saveListing(event))
 
-  trigger.addEventListener('click', () => {
+  function openForm(event) {
+    event.preventDefault()
+    opener = event.currentTarget
     // Move the existing card so /create/ keeps one form and one draft.
     dialog.append(card)
     dialog.showModal()
     dialog.scrollTop = 0
-  })
+  }
+  for (const trigger of document.querySelectorAll('[data-sell], a[href="/create/"]')) {
+    trigger.setAttribute('aria-haspopup', 'dialog')
+    trigger.addEventListener('click', openForm)
+  }
   card.querySelector('[data-close]').addEventListener('click', () => {
     if (dialog.open) dialog.close()
     else location.assign('/profile/')
@@ -32,7 +38,7 @@ export function setupCreateForm() {
       delete dialog.dataset.editing
       document.querySelector('#edit-listing').focus({ preventScroll: true })
     } else {
-      trigger.focus({ preventScroll: true })
+      opener.focus({ preventScroll: true })
     }
   })
 }

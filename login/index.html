@@ -5,29 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Log in | Loop</title>
   </head>
-  <body>
+  <body class="auth-page">
     <a class="sr-only focus:not-sr-only" href="#main">Skip to content</a>
     <header></header>
-    <main id="main" tabindex="-1" class="py-12">
-      <section class="mx-auto max-w-md rounded-3xl border border-[#d9ddcf] bg-white p-6 sm:p-8">
-        <h1 class="font-serif text-4xl">Welcome back.</h1>
-        <p class="mt-2">Log in to bid, list, and manage your profile.</p>
-        <form id="login" method="post" class="my-6 grid gap-5">
-          <label class="font-semibold">Student email
-            <input name="email" type="email" autocomplete="username" required
-              class="mt-1 w-full rounded-xl border p-3 font-normal" />
-          </label>
-          <label class="font-semibold">Password
-            <input name="password" type="password" autocomplete="current-password" required
-              class="mt-1 w-full rounded-xl border p-3 font-normal" />
-          </label>
-          <button class="rounded-full bg-[#173d30] p-3 font-semibold text-white disabled:opacity-60">Log in</button>
-        </form>
-        <p id="login-status" role="status"></p>
-        <p class="mt-4">New to Loop? <a href="/register/" class="font-semibold underline">Create account</a></p>
-      </section>
+    <main data-login-page id="main" tabindex="-1" class="py-12">
+      <h1 class="sr-only">Log in to Loop</h1>
     </main>
     <script type="module" src="/src/main.js"></script>
-    <script type="module" src="/src/login.js"></script>
   </body>
 </html>

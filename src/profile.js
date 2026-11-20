@@ -29,6 +29,8 @@ export function showAccount(profile) {
 
 function showDetails(profile) {
   document.querySelector('#profile-name').textContent = profile.name
+  document.querySelector('#profile-email').textContent = profile.email || ''
+  document.querySelector('#profile-credits').textContent = profile.credits.toLocaleString('en-US') + ' cr'
   document.querySelector('#bio').textContent = profile.bio || 'No bio yet.'
   showImage('banner', profile.banner)
   showImage('avatar', profile.avatar)

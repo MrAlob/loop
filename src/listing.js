@@ -68,6 +68,7 @@ function setupBidding(listing) {
   const message = document.querySelector('#bid-status')
   const highestBid = Math.max(0, ...listing.bids.map(bid => bid.amount))
   input.min = highestBid + 1
+  document.querySelector('#bid-hint').textContent = `Minimum bid: ${input.min} cr`
   form.hidden = false
 
   form.onsubmit = async event => {

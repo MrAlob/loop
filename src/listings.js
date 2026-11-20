@@ -14,7 +14,13 @@ function listingCard(listing) {
   const link = card.querySelector('h3 a')
   link.href = '/listing/?id=' + encodeURIComponent(listing.id)
   link.textContent = listing.title
-  card.querySelector('.bid-count').textContent = `Bids: ${listing._count.bids}`
+  const [category, condition] = listing.tags
+  card.querySelector('.category').textContent = category || 'Auction'
+  card.querySelector('.condition').textContent = condition || ''
+  const bids = listing.bids || []
+  const highest = bids.reduce((max, bid) => Math.max(max, bid.amount), 0)
+  card.querySelector('.price').textContent = highest ? highest + ' cr' : 'No bids yet'
+  card.querySelector('.bid-count').textContent = listing._count.bids === 1 ? '1 bid' : listing._count.bids + ' bids'
 
   const time = card.querySelector('time')
   // Keep the original timestamp in the HTML and show the closing time in the visitor's time zone.
@@ -47,35 +53,53 @@ function listingCard(listing) {
 }
 
 const keyword = document.querySelector('#keyword')
-const noBids = document.querySelector('#no-bids')
 
 // Keep the downloaded listings so visitors can change the filters without another API request.
-let listings = []
+const listings = []
+const filters = document.querySelector('#categories')
+const sort = document.querySelector('#sort')
+if (keyword) {
+  keyword.value = new URLSearchParams(location.search).get('q') || ''
+  for (const category of ['All finds', 'Furniture', 'Tech', 'Bikes', 'Books', 'Home', 'Other']) {
+    const label = document.createElement('label')
+    const radio = document.createElement('input')
+    radio.type = 'radio'
+    radio.name = 'category'
+    radio.value = category === 'All finds' ? '' : category
+    radio.checked = !radio.value
+    radio.className = 'sr-only'
+    label.append(radio, category)
+    filters.append(label)
+  }
+}
 
 function showListings() {
   const query = keyword?.value.trim().toLowerCase() || ''
 
-  // Search the title, description, and tags. If the checkbox is selected, also require zero bids.
+  const category = filters?.querySelector(':checked')?.value
   const matches = listings.filter(listing => {
     const text = [listing.title, listing.description, ...listing.tags].join(' ').toLowerCase()
-    return text.includes(query) && (!noBids?.checked || listing._count.bids === 0)
+    return (!category || listing.tags[0]?.toLowerCase() === category.toLowerCase()) && text.includes(query)
   })
+
+  if (sort?.value === 'created') matches.sort((a, b) => Date.parse(b.created) - Date.parse(a.created))
+  else matches.sort((a, b) => Date.parse(a.endsAt) - Date.parse(b.endsAt))
 
   grid.replaceChildren(...matches.map(listingCard))
 
-  if (matches.length) status.textContent = ''
+  if (matches.length) status.textContent = keyword ? matches.length + (matches.length === 1 ? ' find' : ' finds') : ''
   else if (listings.length) status.textContent = 'No matching auctions. Try another keyword or clear the filter.'
   else status.textContent = 'There are no active auctions right now.'
 }
 
 async function loadListings() {
   try {
-    // Only Browse has a search field. It loads all active auctions in batches of 100. The homepage loads eight.
-    const limit = keyword ? 100 : 8
+    // Only Browse has a search field. It loads all active auctions in batches of 100. The homepage loads the next four to close.
+    const limit = keyword ? 100 : 4
     let page = 1
 
     while (page) {
-      const url = `${LISTINGS_URL}?_active=true&sort=created&sortOrder=desc&limit=${limit}&page=${page}`
+      const url = `${LISTINGS_URL}?_active=true&_bids=true&sort=endsAt&sortOrder=asc&limit=${limit}&page=${page}`
       const response = await fetch(url)
       if (!response.ok) throw new Error('Could not load auctions')
 
@@ -85,8 +109,9 @@ async function loadListings() {
     }
 
     showListings()
+    filters?.addEventListener('change', showListings)
+    sort?.addEventListener('change', showListings)
     keyword?.addEventListener('input', showListings)
-    noBids?.addEventListener('change', showListings)
   } catch {
     status.textContent = 'Could not load auctions. Refresh the page to try again.'
   }
