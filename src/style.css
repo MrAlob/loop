@@ -63,6 +63,16 @@ header { border-bottom: 1px solid #d9ddcf; }
 header button { cursor: pointer; }
 header nav a:hover, header button:hover { text-decoration: underline; }
 #menu { display: none; }
+a[href="#main"]:focus-visible {
+  position: fixed;
+  top: .5rem;
+  left: .5rem;
+  z-index: 3;
+  padding: .6rem 1rem;
+  background: white;
+  color: var(--forest);
+}
+
 :focus-visible { outline: 2px solid var(--forest); outline-offset: 3px; }
 
 @media (max-width: 48rem) {
@@ -106,7 +116,7 @@ header nav a:hover, header button:hover { text-decoration: underline; }
   width: 100%;
   margin-top: .4rem;
   padding: .75rem;
-  border: 1px solid #d5d7cd;
+  border: 1px solid #778479;
   border-radius: .75rem;
   background: white;
   font: inherit;
@@ -125,3 +135,5 @@ header nav a:hover, header button:hover { text-decoration: underline; }
 }
 #sell-dialog::backdrop { background: rgb(23 37 33 / 65%); }
 html:has(#sell-dialog[open]) { overflow: hidden; }
+
+#keyword { border-color: #778479; }

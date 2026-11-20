@@ -26,9 +26,10 @@
             <form id="bid-form" hidden class="space-y-2 rounded-2xl bg-white p-5">
               <label for="bid-amount" class="block font-semibold">Your bid (credits)</label>
               <div class="flex flex-wrap gap-2">
-                <input id="bid-amount" type="number" min="1" step="1" required class="w-32 rounded-xl border px-3 py-2">
+                <input id="bid-amount" aria-describedby="bid-hint" type="number" min="1" step="1" required class="w-32 rounded-xl border px-3 py-2">
                 <button class="rounded-full bg-[var(--forest)] px-5 py-2 font-semibold text-white disabled:opacity-60">Place bid</button>
               </div>
+              <p id="bid-hint" class="text-sm"></p>
               <p id="bid-status" role="status"></p>
             </form>
             <a id="bid-login" hidden href="/login/" class="underline">Log in to bid</a>

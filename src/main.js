@@ -60,7 +60,13 @@ menu.addEventListener('click', () => {
 })
 
 header.addEventListener('keydown', event => {
-  if (event.key === 'Escape' && menu.getAttribute('aria-expanded') === 'true') {
+  if (event.key !== 'Escape') return
+
+  const account = header.querySelector('.user-menu[open]')
+  if (account) {
+    account.open = false
+    account.querySelector('summary').focus()
+  } else if (menu.getAttribute('aria-expanded') === 'true' && menu.offsetWidth > 0) {
     setMenu(false)
     menu.focus()
   }
