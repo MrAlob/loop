@@ -1,3 +1,6 @@
+import { LISTINGS_URL } from './api.js'
+import { editListing, listingRequest } from './create.js'
+
 const id = new URLSearchParams(location.search).get('id')
 const status = document.querySelector('#status')
 
@@ -48,6 +51,31 @@ function showListing(listing) {
   document.querySelector('#details').hidden = false
 }
 
+function showOwnerActions(listing) {
+  if (!sessionStorage.getItem('loop.accessToken') || sessionStorage.getItem('loop.name') !== listing.seller.name) return
+
+  const dialog = document.querySelector('#confirm-delete')
+  const error = document.querySelector('#delete-error')
+  const remove = document.querySelector('#remove')
+  document.querySelector('#owner-actions').hidden = false
+  document.querySelector('#edit-listing').onclick = () => editListing(listing)
+  document.querySelector('#delete-listing').onclick = () => {
+    error.textContent = ''
+    dialog.showModal()
+  }
+  document.querySelector('#keep').onclick = () => dialog.close()
+  remove.onclick = async () => {
+    remove.disabled = true
+    try {
+      await listingRequest('DELETE', listing.id)
+      location.replace('/profile/')
+    } catch (reason) {
+      error.textContent = 'Could not delete the listing. ' + reason.message
+      remove.disabled = false
+    }
+  }
+}
+
 async function loadListing() {
   if (!id) {
     status.textContent = 'No auction selected. Choose a listing from Browse.'
@@ -56,7 +84,7 @@ async function loadListing() {
 
   try {
     // Request the seller and bids together with the listing.
-    const url = 'https://v2.api.noroff.dev/auction/listings/' + encodeURIComponent(id) + '?_seller=true&_bids=true'
+    const url = `${LISTINGS_URL}/${encodeURIComponent(id)}?_seller=true&_bids=true`
     const response = await fetch(url)
     if (response.status === 404 || response.status === 400) {
       status.textContent = 'Auction not found.'
@@ -65,6 +93,7 @@ async function loadListing() {
     if (!response.ok) throw new Error('Listing request failed')
     const { data } = await response.json()
     showListing(data)
+    showOwnerActions(data)
   } catch {
     status.textContent = 'Could not load the auction. Refresh to try again.'
   }

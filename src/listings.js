@@ -1,3 +1,4 @@
+import { LISTINGS_URL } from './api.js'
 import cardHtml from './listing-card.html?raw'
 
 const grid = document.querySelector('#listings')
@@ -74,7 +75,7 @@ async function loadListings() {
     let page = 1
 
     while (page) {
-      const url = `https://v2.api.noroff.dev/auction/listings?_active=true&sort=created&sortOrder=desc&limit=${limit}&page=${page}`
+      const url = `${LISTINGS_URL}?_active=true&sort=created&sortOrder=desc&limit=${limit}&page=${page}`
       const response = await fetch(url)
       if (!response.ok) throw new Error('Could not load auctions')
 
