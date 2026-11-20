@@ -1,6 +1,9 @@
 import './style.css'
 
-const signedIn = Boolean(sessionStorage.getItem('loop.accessToken'))
+const token = sessionStorage.getItem('loop.accessToken')
+const name = sessionStorage.getItem('loop.name')
+const signedIn = Boolean(token && name)
+const privateContent = document.querySelector('[data-private]')
 const header = document.querySelector('header')
 header.innerHTML = `
   <p class="announcement">Made for students · Powered by things already in circulation</p>
@@ -53,13 +56,51 @@ header.addEventListener('keydown', event => {
   }
 })
 
-if (signedIn) {
-  const credits = sessionStorage.getItem('loop.credits')
-  document.querySelector('#balance').textContent = credits === null ? 'Balance unavailable' : credits + ' cr'
-
-  document.querySelector('#logout').addEventListener('click', () => {
-    sessionStorage.removeItem('loop.accessToken')
-    sessionStorage.removeItem('loop.credits')
-    location.assign('/')
-  })
+function endSession(destination) {
+  sessionStorage.removeItem('loop.accessToken')
+  sessionStorage.removeItem('loop.name')
+  sessionStorage.removeItem('loop.credits')
+  location.replace(destination)
 }
+
+// Noroff verifies the token before we show a member page.
+async function loadProfile() {
+  const balance = document.querySelector('#balance')
+  balance.textContent = 'Balance unavailable'
+  try {
+    const response = await fetch('https://v2.api.noroff.dev/auction/profiles/' + encodeURIComponent(name), {
+      headers: {
+        Authorization: 'Bearer ' + token,
+        'X-Noroff-API-Key': import.meta.env.VITE_NOROFF_API_KEY,
+      },
+    })
+    if (response.status === 401) {
+      endSession('/login/')
+      return
+    }
+    if (!response.ok) throw new Error('Profile request failed')
+
+    const { data } = await response.json()
+    balance.textContent = data.credits + ' cr'
+    if (privateContent) {
+      document.querySelector('#session-status').textContent = ''
+      privateContent.hidden = false
+    }
+  } catch {
+    if (privateContent) {
+      document.querySelector('#session-status').textContent = 'Could not load your profile. Refresh to try again.'
+    }
+  }
+}
+
+if (signedIn) {
+  document.querySelector('#logout').addEventListener('click', () => endSession('/'))
+  loadProfile()
+} else if (privateContent) {
+  location.replace('/login/')
+}
+
+// Recheck the session when Back restores a page from browser memory.
+window.addEventListener('pageshow', event => {
+  if (event.persisted) location.reload()
+})
