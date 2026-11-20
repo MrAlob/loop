@@ -99,3 +99,16 @@ header nav a:hover, header button:hover { text-decoration: underline; }
 @media (max-width: 30rem) {
   .user-menu:has(img:not([hidden])) #member-name { display: none; }
 }
+
+#create-listing label { min-width: 0; font-weight: 600; }
+#create-listing :is(input, select, textarea) {
+  display: block;
+  width: 100%;
+  margin-top: .4rem;
+  padding: .75rem;
+  border: 1px solid #d5d7cd;
+  border-radius: .75rem;
+  background: white;
+  font: inherit;
+  font-weight: 400;
+}
