@@ -9,9 +9,29 @@
     <a class="sr-only focus:not-sr-only" href="#main">Skip to content</a>
     <header></header>
     <main id="main" tabindex="-1" class="py-12">
-      <div data-private hidden>
-        <h1 class="mb-4 font-serif text-4xl">Profile</h1>
-        <p>This page is a layout placeholder.</p>
+      <div id="my-profile" data-private hidden>
+        <section class="overflow-hidden rounded-3xl border border-[#d9ddcf] bg-white">
+          <img id="banner" hidden alt="" class="h-36 w-full object-cover sm:h-52" />
+          <div class="flex flex-wrap items-center gap-5 p-6">
+            <img id="avatar" hidden alt="" class="size-20 rounded-full object-cover" />
+            <div class="min-w-0 flex-1 break-words">
+              <h1 id="profile-name" class="font-serif text-4xl"></h1>
+              <p id="bio" class="mt-2 whitespace-pre-line"></p>
+            </div>
+          </div>
+        </section>
+        <div class="mt-8 grid gap-8 md:grid-cols-2">
+          <section>
+            <h2 class="mb-3 font-serif text-2xl">My listings</h2>
+            <p id="own-status">You haven’t created any listings yet.</p>
+            <ul id="own-listings" class="grid gap-2"></ul>
+          </section>
+          <section>
+            <h2 class="mb-3 font-serif text-2xl">Listings I’ve bid on</h2>
+            <p id="bid-status" role="status">Loading your bids…</p>
+            <ul id="bid-listings" class="grid gap-2"></ul>
+          </section>
+        </div>
       </div>
       <p id="session-status" role="status">Checking your session…</p>
     </main>
