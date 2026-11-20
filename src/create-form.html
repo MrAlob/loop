@@ -1,0 +1,36 @@
+<div class="relative mx-auto max-w-[44rem] rounded-3xl bg-[var(--cream)] p-6 sm:p-10">
+  <p class="text-xs font-bold tracking-wide">START A NEW LOOP</p>
+  <button type="button" data-close aria-label="Close listing form" class="absolute right-5 top-5 grid size-10 place-items-center rounded-full bg-black/5 text-2xl">×</button>
+  <h1 id="listing-heading" class="my-8 font-serif text-4xl font-bold sm:text-5xl">What are you<br />passing on?</h1>
+  <form id="create-listing" class="grid gap-5 sm:grid-cols-2">
+    <label class="sm:col-span-2">Listing title
+      <input name="title" required placeholder="e.g. Solid oak desk" />
+    </label>
+    <label>Category
+      <select name="category">
+        <option>Furniture</option><option>Tech</option><option>Bikes</option>
+        <option>Books</option><option>Home</option><option>Other</option>
+      </select>
+    </label>
+    <label>Condition
+      <input name="condition" required placeholder="e.g. Gently used" />
+    </label>
+    <label class="sm:col-span-2">Deadline
+      <input name="deadline" type="datetime-local" required />
+    </label>
+    <label class="sm:col-span-2">Main image URL
+      <input name="photo" type="url" required pattern="https?://.+" placeholder="https://…" />
+    </label>
+    <label>Gallery image 2 (optional)
+      <input name="photo" type="url" pattern="https?://.+" placeholder="https://…" />
+    </label>
+    <label>Gallery image 3 (optional)
+      <input name="photo" type="url" pattern="https?://.+" placeholder="https://…" />
+    </label>
+    <label class="sm:col-span-2">Description
+      <textarea name="description" rows="4" required placeholder="Describe the item honestly, including any marks or repairs."></textarea>
+    </label>
+    <button class="rounded-full bg-[var(--forest)] px-5 py-3 text-left font-bold text-white disabled:opacity-60 sm:col-span-2">Publish listing</button>
+    <p id="publish-status" role="status" class="empty:hidden sm:col-span-2"></p>
+  </form>
+</div>

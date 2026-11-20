@@ -5,15 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create listing | Loop</title>
   </head>
-  <body>
+  <body class="bg-[#24292c]">
     <a class="sr-only focus:not-sr-only" href="#main">Skip to content</a>
-    <header></header>
-    <main id="main" tabindex="-1" class="py-12">
-      <div data-private hidden>
-        <h1 class="mb-4 font-serif text-4xl">Create listing</h1>
-        <p>This page is a layout placeholder.</p>
-      </div>
-      <p id="session-status" role="status">Checking your session…</p>
+    <header class="bg-[var(--cream)]"></header>
+    <main id="main" tabindex="-1" class="py-6 sm:py-10">
+      <div id="create-page" data-private hidden></div>
+      <p class="mx-auto max-w-[44rem] rounded-xl bg-[var(--cream)] p-3 empty:hidden" id="session-status" role="status">Checking your session…</p>
     </main>
     <script type="module" src="/src/main.js"></script>
   </body>
