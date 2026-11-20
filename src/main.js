@@ -16,7 +16,7 @@ header.innerHTML = `
     <nav id="navigation" aria-label="Main navigation">
       <div class="links">
         <a href="/browse/">Browse</a>
-        <a href="/#how-it-works">How it works</a>
+        <a href="/how-it-works/">How it works</a>
         <a href="${signedIn ? '/create/' : '/login/'}">Sell an item</a>
       </div>
       <div class="account">

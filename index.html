@@ -10,12 +10,14 @@
     <header></header>
     <main id="main" tabindex="-1" class="py-12">
       <h1 class="mb-4 font-serif text-4xl">Student auction house</h1>
-      <a class="underline" href="/browse/">Browse listings</a>
-      <section id="how-it-works" class="mt-12" aria-labelledby="how-heading">
-        <h2 id="how-heading" class="mb-2 font-serif text-2xl">How it works</h2>
-        <p>Browse student listings, bid with credits, or list an item of your own.</p>
+      <section class="mt-8" aria-labelledby="listings-heading">
+        <h2 id="listings-heading" class="mb-4 font-serif text-3xl">Items worth keeping.</h2>
+        <p id="listings-status" role="status">Loading auctions…</p>
+        <div id="listings" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4"></div>
       </section>
+      <a class="mt-6 inline-block underline" href="/browse/">Browse listings</a>
     </main>
     <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/listings.js"></script>
   </body>
 </html>
