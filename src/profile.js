@@ -1,6 +1,10 @@
 function showImage(id, photo) {
-  if (!photo?.url) return
   const image = document.getElementById(id)
+  if (!photo?.url) {
+    image.hidden = true
+    image.removeAttribute('src')
+    return
+  }
   image.alt = photo.alt || ''
   image.hidden = false
   image.onerror = () => { image.hidden = true }
@@ -17,11 +21,61 @@ function addListing(list, listing) {
   list.append(item)
 }
 
-export async function showProfile(profile, getProfileData) {
+export function showAccount(profile) {
+  document.querySelector('#balance').textContent = profile.credits.toLocaleString('en-US') + ' cr'
+  document.querySelector('#member-name').textContent = profile.name
+  showImage('member-avatar', profile.avatar)
+}
+
+function showDetails(profile) {
   document.querySelector('#profile-name').textContent = profile.name
   document.querySelector('#bio').textContent = profile.bio || 'No bio yet.'
   showImage('banner', profile.banner)
   showImage('avatar', profile.avatar)
+}
+
+export async function showProfile(profile, getProfileData) {
+  showDetails(profile)
+  const dialog = document.querySelector('#settings')
+  const form = document.querySelector('#profile-form')
+  const error = document.querySelector('#save-error')
+  const submit = form.querySelector('button')
+  document.querySelector('#edit-profile').onclick = () => {
+    form.elements.bio.value = profile.bio || ''
+    for (const field of ['avatar', 'banner']) {
+      form.elements[field].value = profile[field]?.url || ''
+      form.elements[field].required = Boolean(profile[field]?.url)
+    }
+    error.textContent = ''
+    document.querySelector('#saved').textContent = ''
+    dialog.showModal()
+  }
+  document.querySelector('#close-settings').onclick = () => dialog.close()
+
+  form.onsubmit = async event => {
+    event.preventDefault()
+    if (submit.disabled) return
+    submit.disabled = true
+    error.textContent = ''
+    const changes = { bio: form.elements.bio.value.trim() }
+    // Send new image URLs only when the student changes them.
+    for (const field of ['avatar', 'banner']) {
+      const url = form.elements[field].value.trim()
+      if (url && url !== profile[field]?.url) changes[field] = { url, alt: '' }
+    }
+    try {
+      const result = await getProfileData('', changes)
+      profile = result.data
+      showDetails(profile)
+      showAccount(profile)
+      dialog.close()
+      document.querySelector('#saved').textContent = 'Profile saved.'
+    } catch (reason) {
+      error.textContent = 'Could not save your profile. ' + reason.message
+    } finally {
+      submit.disabled = false
+    }
+  }
 
   const own = document.querySelector('#own-listings')
   for (const listing of profile.listings) addListing(own, listing)

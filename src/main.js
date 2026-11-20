@@ -1,5 +1,5 @@
 import './style.css'
-import { showProfile } from './profile.js'
+import { showProfile, showAccount } from './profile.js'
 
 const token = sessionStorage.getItem('loop.accessToken')
 const name = sessionStorage.getItem('loop.name')
@@ -23,21 +23,28 @@ header.innerHTML = `
         <a href="/how-it-works/">How it works</a>
         <a href="${signedIn ? '/create/' : '/login/'}">Sell an item</a>
       </div>
-      <div class="account">
-        ${signedIn ? `
-          <span id="balance"></span>
-          <a href="/profile/">Profile</a>
-          <button id="logout">Log out</button>
-        ` : `
+      ${signedIn ? '' : `<div class="account">
           <a class="login" href="/login/">
             <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <circle cx="12" cy="7" r="4"/><path d="M3 22a9 9 0 0 1 18 0"/>
             </svg>
             Log in
           </a>
-        `}
-      </div>
+      </div>`}
     </nav>
+    ${signedIn ? `<div class="member">
+      <span id="balance">… cr</span>
+      <details class="user-menu">
+        <summary aria-label="Account menu">
+          <img id="member-avatar" hidden alt="" />
+          <span id="member-name">Account</span>
+        </summary>
+        <div class="user-links">
+          <a href="/profile/">Profile</a>
+          <button id="logout">Log out</button>
+        </div>
+      </details>
+    </div>` : ''}
   </div>`
 
 const menu = document.querySelector('#menu')
@@ -65,16 +72,20 @@ function endSession(destination) {
 }
 
 // Use the same session and API key for profile and bid requests.
-async function getProfileData(path) {
+async function getProfileData(path, changes) {
   const response = await fetch('https://v2.api.noroff.dev/auction/profiles/' + encodeURIComponent(name) + path, {
+    method: changes ? 'PUT' : 'GET',
+    body: changes ? JSON.stringify(changes) : undefined,
     headers: {
+      ...(changes && { 'Content-Type': 'application/json' }),
       Authorization: 'Bearer ' + token,
       'X-Noroff-API-Key': import.meta.env.VITE_NOROFF_API_KEY,
     },
   })
   if (response.status === 401) endSession('/login/')
-  if (!response.ok) throw new Error('Profile request failed')
-  return response.json()
+  const result = await response.json()
+  if (!response.ok) throw new Error(result.errors?.[0]?.message || 'Profile request failed.')
+  return result
 }
 
 async function loadProfile() {
@@ -83,7 +94,7 @@ async function loadProfile() {
   try {
     const onProfilePage = Boolean(document.querySelector('#my-profile'))
     const { data } = await getProfileData(onProfilePage ? '?_listings=true' : '')
-    balance.textContent = data.credits + ' cr'
+    showAccount(data)
     if (privateContent) {
       document.querySelector('#session-status').textContent = ''
       privateContent.hidden = false
