@@ -51,6 +51,48 @@ function showListing(listing) {
   document.querySelector('#details').hidden = false
 }
 
+function setupBidding(listing) {
+  const end = new Date(listing.endsAt)
+  if (end <= new Date()) return
+
+  const name = sessionStorage.getItem('loop.name')
+  if (!name || !sessionStorage.getItem('loop.accessToken')) {
+    document.querySelector('#bid-login').hidden = false
+    return
+  }
+  if (name === listing.seller.name) return
+
+  const form = document.querySelector('#bid-form')
+  const input = form.querySelector('input')
+  const button = form.querySelector('button')
+  const message = document.querySelector('#bid-status')
+  const highestBid = Math.max(0, ...listing.bids.map(bid => bid.amount))
+  input.min = highestBid + 1
+  form.hidden = false
+
+  form.onsubmit = async event => {
+    event.preventDefault()
+    if (button.disabled) return
+    button.disabled = true
+    if (end <= new Date()) {
+      message.textContent = 'This auction has ended.'
+      return
+    }
+
+    message.textContent = 'Placing bid…'
+    try {
+      await listingRequest('POST', '/' + encodeURIComponent(listing.id) + '/bids', {
+        amount: input.valueAsNumber,
+      })
+      // Reload the bid history and credit balance from Noroff after a successful bid.
+      location.reload()
+    } catch (error) {
+      message.textContent = 'Could not place bid. ' + error.message
+      button.disabled = false
+    }
+  }
+}
+
 function showOwnerActions(listing) {
   if (!sessionStorage.getItem('loop.accessToken') || sessionStorage.getItem('loop.name') !== listing.seller.name) return
 
@@ -67,7 +109,7 @@ function showOwnerActions(listing) {
   remove.onclick = async () => {
     remove.disabled = true
     try {
-      await listingRequest('DELETE', listing.id)
+      await listingRequest('DELETE', '/' + encodeURIComponent(listing.id))
       location.replace('/profile/')
     } catch (reason) {
       error.textContent = 'Could not delete the listing. ' + reason.message
@@ -94,6 +136,7 @@ async function loadListing() {
     const { data } = await response.json()
     showListing(data)
     showOwnerActions(data)
+    setupBidding(data)
   } catch {
     status.textContent = 'Could not load the auction. Refresh to try again.'
   }

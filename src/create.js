@@ -70,8 +70,7 @@ export function editListing(listing) {
   dialog.scrollTop = 0
 }
 
-export async function listingRequest(method, id, listing) {
-  const path = id ? '/' + encodeURIComponent(id) : ''
+export async function listingRequest(method, path, body) {
   const response = await fetch(LISTINGS_URL + path, {
     method,
     headers: {
@@ -79,7 +78,7 @@ export async function listingRequest(method, id, listing) {
       Authorization: 'Bearer ' + sessionStorage.getItem('loop.accessToken'),
       'X-Noroff-API-Key': import.meta.env.VITE_NOROFF_API_KEY,
     },
-    body: JSON.stringify(listing),
+    body: JSON.stringify(body),
   })
   if (response.status === 204) return
   const result = await response.json()
@@ -124,7 +123,7 @@ async function saveListing(event, original) {
   status.textContent = original ? 'Saving…' : 'Publishing…'
   try {
     if (original) {
-      await listingRequest('PUT', original.id, listing)
+      await listingRequest('PUT', '/' + encodeURIComponent(original.id), listing)
       location.reload()
     } else {
       const created = await listingRequest('POST', '', listing)
