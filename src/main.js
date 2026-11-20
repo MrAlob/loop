@@ -1,4 +1,5 @@
 import './style.css'
+import { showProfile } from './profile.js'
 
 const token = sessionStorage.getItem('loop.accessToken')
 const name = sessionStorage.getItem('loop.name')
@@ -63,29 +64,31 @@ function endSession(destination) {
   location.replace(destination)
 }
 
-// Noroff verifies the token before we show a member page.
+// Use the same session and API key for profile and bid requests.
+async function getProfileData(path) {
+  const response = await fetch('https://v2.api.noroff.dev/auction/profiles/' + encodeURIComponent(name) + path, {
+    headers: {
+      Authorization: 'Bearer ' + token,
+      'X-Noroff-API-Key': import.meta.env.VITE_NOROFF_API_KEY,
+    },
+  })
+  if (response.status === 401) endSession('/login/')
+  if (!response.ok) throw new Error('Profile request failed')
+  return response.json()
+}
+
 async function loadProfile() {
   const balance = document.querySelector('#balance')
   balance.textContent = 'Balance unavailable'
   try {
-    const response = await fetch('https://v2.api.noroff.dev/auction/profiles/' + encodeURIComponent(name), {
-      headers: {
-        Authorization: 'Bearer ' + token,
-        'X-Noroff-API-Key': import.meta.env.VITE_NOROFF_API_KEY,
-      },
-    })
-    if (response.status === 401) {
-      endSession('/login/')
-      return
-    }
-    if (!response.ok) throw new Error('Profile request failed')
-
-    const { data } = await response.json()
+    const onProfilePage = Boolean(document.querySelector('#my-profile'))
+    const { data } = await getProfileData(onProfilePage ? '?_listings=true' : '')
     balance.textContent = data.credits + ' cr'
     if (privateContent) {
       document.querySelector('#session-status').textContent = ''
       privateContent.hidden = false
     }
+    if (onProfilePage) await showProfile(data, getProfileData)
   } catch {
     if (privateContent) {
       document.querySelector('#session-status').textContent = 'Could not load your profile. Refresh to try again.'
