@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Listing | Loop</title>
+  </head>
+  <body>
+    <a class="sr-only focus:not-sr-only" href="#main">Skip to content</a>
+    <header></header>
+    <main id="main" tabindex="-1" class="py-10">
+      <a href="/browse/" class="underline">← Browse listings</a>
+      <p id="status" role="status" class="mt-4">Loading auction…</p>
+      <article id="details" hidden>
+        <div class="grid items-start gap-8 md:grid-cols-2">
+          <div id="photos" class="grid gap-3 rounded-2xl bg-[#e4f3ea] p-3">No photo available</div>
+          <div class="min-w-0 space-y-5 break-words">
+            <p>Listed by <strong id="seller"></strong></p>
+            <h1 id="title" class="font-serif text-4xl"></h1>
+            <p id="description" class="whitespace-pre-line"></p>
+            <div class="rounded-2xl bg-white p-5">
+              <p>Current bid</p>
+              <strong id="amount" class="text-2xl"></strong>
+              <p class="mt-3"><span id="deadline-label">Ends</span> <time id="deadline"></time></p>
+            </div>
+            <section>
+              <h2 class="mb-2 font-serif text-2xl">Bid history</h2>
+              <p id="empty">No bids yet.</p>
+              <ol id="bids" class="divide-y divide-[#d9ddcf]"></ol>
+            </section>
+          </div>
+        </div>
+      </article>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/listing.js"></script>
+  </body>
+</html>
