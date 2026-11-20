@@ -73,3 +73,29 @@ header nav a:hover, header button:hover { text-decoration: underline; }
   .links, .account { flex-direction: column; align-items: flex-start; gap: 0; }
   .account { justify-self: stretch; margin-top: .5rem; }
 }
+
+.bar:has(.member) #navigation { grid-column: 2; display: block; }
+.member, .user-menu summary { display: flex; align-items: center; gap: .65rem; }
+.member { justify-self: end; min-width: 0; font-weight: 700; }
+#balance { border-radius: 999px; padding: .7rem 1.1rem; background: #dee967; white-space: nowrap; }
+.user-menu { position: relative; min-width: 0; }
+.user-menu summary { list-style: none; cursor: pointer; }
+.user-menu summary::-webkit-details-marker { display: none; }
+#member-name { max-width: 8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#member-avatar { width: 2rem; height: 2rem; border-radius: 50%; object-fit: cover; }
+.user-links { position: absolute; right: 0; top: 100%; z-index: 2; min-width: 8rem; padding: .5rem 1rem; border: 1px solid #d9ddcf; border-radius: 1rem; background: var(--cream); }
+.user-links > * { display: block; padding-block: .5rem; }
+
+@media (max-width: 48rem) {
+  .bar:has(.member) { grid-template-columns: auto minmax(0, 1fr) auto; gap: .4rem; }
+  .bar:has(.member) #menu { grid-column: 3; grid-row: 1; padding-inline: .8rem; }
+  .member { grid-column: 2; grid-row: 1; }
+  .bar:has(.member) #navigation { display: none; grid-column: 1 / -1; grid-row: 2; }
+  .bar:has(.member) #menu[aria-expanded="true"] + nav { display: block; }
+  #balance { padding: .4rem .6rem; font-size: .875rem; }
+  #member-name { max-width: 5rem; }
+}
+
+@media (max-width: 30rem) {
+  .user-menu:has(img:not([hidden])) #member-name { display: none; }
+}
