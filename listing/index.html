@@ -12,11 +12,11 @@
       <a href="/browse/" class="underline">← Browse listings</a>
       <p id="status" role="status" class="mt-4">Loading auction…</p>
       <article id="details" hidden>
-        <div class="grid items-start gap-8 md:grid-cols-2">
-          <div id="photos" class="grid gap-3 rounded-2xl bg-[#e4f3ea] p-3">No photo available</div>
-          <div class="min-w-0 space-y-5 break-words">
-            <p>Listed by <strong id="seller"></strong></p>
-            <h1 id="title" class="font-serif text-4xl"></h1>
+        <div class="grid items-start gap-7 overflow-hidden rounded-3xl border border-[#d9ddcf] md:grid-cols-2">
+          <div id="photos" class="grid min-h-48 gap-2 bg-[#e4f3ea]">No photo available</div>
+          <div class="min-w-0 space-y-5 px-5 pb-8 break-words md:py-8 md:pr-8">
+            <p class="eyebrow">Listed by <strong id="seller"></strong></p>
+            <h1 id="title" class="font-serif text-5xl"></h1>
             <p id="description" class="whitespace-pre-line"></p>
             <div class="rounded-2xl bg-white p-5">
               <p>Current bid</p>
@@ -32,7 +32,7 @@
               <p id="bid-hint" class="text-sm"></p>
               <p id="bid-status" role="status"></p>
             </form>
-            <a id="bid-login" hidden href="/login/" class="underline">Log in to bid</a>
+            <a id="bid-login" hidden href="/login/" class="pill">Log in to bid</a>
             <div id="owner-actions" hidden>
               <button id="edit-listing" class="rounded-full bg-[var(--forest)] px-5 py-2 font-semibold text-white">Edit listing</button>
               <button id="delete-listing" class="ml-3 underline">Delete listing</button>

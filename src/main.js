@@ -1,5 +1,7 @@
 import { PROFILES_URL } from './api.js'
 import './style.css'
+import footerHtml from './footer.html?raw'
+import { setupLogin } from './login.js'
 import { setupCreateForm } from './create.js'
 import { showProfile, showAccount } from './profile.js'
 
@@ -9,7 +11,7 @@ const signedIn = Boolean(token && name)
 const privateContent = document.querySelector('[data-private]')
 const header = document.querySelector('header')
 header.innerHTML = `
-  <p class="announcement">Made for students · Powered by things already in circulation</p>
+  <p class="announcement">Made for students · Powered by <span class="hidden sm:inline">things already in circulation</span><span class="sm:hidden">reuse</span></p>
   <div class="bar">
     <a class="brand" href="/" aria-label="Loop home">
       <svg aria-hidden="true" width="40" height="40" viewBox="0 0 40 40">
@@ -18,12 +20,13 @@ header.innerHTML = `
       </svg>
       loop
     </a>
+    ${signedIn ? '' : '<a class="mobile-login" href="/login/">Log in</a>'}
     <button id="menu" aria-expanded="false" aria-controls="navigation">Menu</button>
     <nav id="navigation" aria-label="Main navigation">
       <div class="links">
         <a href="/browse/">Browse</a>
         <a href="/how-it-works/">How it works</a>
-        ${signedIn ? '<button id="sell-item" aria-haspopup="dialog">Sell an item</button>' : '<a href="/login/">Sell an item</a>'}
+        ${signedIn ? '<button id="sell-item" data-sell aria-haspopup="dialog">Sell an item</button>' : '<a href="/create/">Sell an item</a>'}
       </div>
       ${signedIn ? '' : `<div class="account">
           <a class="login" href="/login/">
@@ -48,6 +51,8 @@ header.innerHTML = `
       </details>
     </div>` : ''}
   </div>`
+
+document.querySelector('main').insertAdjacentHTML('afterend', footerHtml)
 
 const menu = document.querySelector('#menu')
 
@@ -115,12 +120,18 @@ async function loadProfile() {
   }
 }
 
+const loginPage = document.querySelector('[data-login-page]')
 if (signedIn) {
+  if (loginPage) location.replace('/profile/')
   setupCreateForm()
+  if (sessionStorage.getItem('loop.openSell')) {
+    sessionStorage.removeItem('loop.openSell')
+    document.querySelector('#sell-item').click()
+  }
   document.querySelector('#logout').addEventListener('click', () => endSession('/'))
   loadProfile()
-} else if (privateContent) {
-  location.replace('/login/')
+} else {
+  setupLogin(Boolean(loginPage), Boolean(privateContent))
 }
 
 // Recheck the session when Back restores a page from browser memory.

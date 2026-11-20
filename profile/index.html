@@ -16,6 +16,7 @@
             <img id="avatar" hidden alt="" class="size-20 rounded-full object-cover" />
             <div class="min-w-0 flex-1 break-words">
               <h1 id="profile-name" class="font-serif text-4xl"></h1>
+              <p id="profile-email" class="text-sm"></p>
               <p id="bio" class="mt-2 whitespace-pre-line"></p>
             </div>
             <button id="edit-profile" class="rounded-full border px-4 py-2 font-semibold">Edit profile</button>
@@ -42,14 +43,21 @@
             <button class="rounded-full bg-[#173d30] p-3 font-semibold text-white disabled:opacity-60">Save profile</button>
           </form>
         </dialog>
-        <div class="mt-8 grid gap-8 md:grid-cols-2">
+        <div class="mt-8 grid items-start gap-8 md:grid-cols-[16rem_1fr]">
+          <aside class="rounded-2xl bg-[var(--lime)] p-6 md:row-span-2">
+            <h2 class="font-semibold">Available balance</h2><p id="profile-credits" class="my-3 font-serif text-4xl"></p>
+            <p class="mb-4 text-sm">Credits let you bid. You earn more when your listings are sold.</p>
+            <button type="button" id="profile-create" data-sell class="pill" aria-haspopup="dialog">Create listing</button>
+          </aside>
           <section>
-            <h2 class="mb-3 font-serif text-2xl">My listings</h2>
+            <p class="eyebrow">Seller dashboard</p>
+            <h2 class="mb-3 font-serif text-3xl">Your listings</h2>
             <p id="own-status">You haven’t created any listings yet.</p>
             <ul id="own-listings" class="grid gap-2"></ul>
           </section>
           <section>
-            <h2 class="mb-3 font-serif text-2xl">Listings I’ve bid on</h2>
+            <p class="eyebrow">Auction activity</p>
+            <h2 class="mb-3 font-serif text-3xl">Listings you’ve bid on</h2>
             <p id="bid-status" role="status">Loading your bids…</p>
             <ul id="bid-listings" class="grid gap-2"></ul>
           </section>
