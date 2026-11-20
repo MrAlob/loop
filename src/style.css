@@ -112,3 +112,16 @@ header nav a:hover, header button:hover { text-decoration: underline; }
   font: inherit;
   font-weight: 400;
 }
+
+#sell-dialog {
+  margin: auto;
+  width: min(44rem, 94%);
+  max-height: 92dvh;
+  border-radius: 1.5rem;
+  background: var(--cream);
+  color: var(--forest);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+#sell-dialog::backdrop { background: rgb(23 37 33 / 65%); }
+html:has(#sell-dialog[open]) { overflow: hidden; }

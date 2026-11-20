@@ -1,8 +1,39 @@
-const form = document.querySelector('#create-listing')
-const status = document.querySelector('#publish-status')
-const button = form.querySelector('button')
+import formHtml from './create-form.html?raw'
 
-form.addEventListener('submit', async event => {
+export function setupCreateForm() {
+  const page = document.querySelector('#create-page')
+  const trigger = document.querySelector('#sell-item')
+  const dialog = document.createElement('dialog')
+  dialog.id = 'sell-dialog'
+  dialog.setAttribute('aria-labelledby', 'listing-heading')
+  document.body.append(dialog)
+
+  const container = page || dialog
+  container.innerHTML = formHtml
+  const card = container.firstElementChild
+  card.querySelector('form').addEventListener('submit', publishListing)
+
+  trigger.addEventListener('click', () => {
+    // Move the existing card so /create/ keeps one form and one draft.
+    dialog.append(card)
+    dialog.showModal()
+    dialog.scrollTop = 0
+  })
+  card.querySelector('[data-close]').addEventListener('click', () => {
+    if (dialog.open) dialog.close()
+    else location.assign('/profile/')
+  })
+  dialog.addEventListener('close', () => {
+    if (dialog.open) return
+    if (page) page.append(card)
+    trigger.focus({ preventScroll: true })
+  })
+}
+
+async function publishListing(event) {
+  const form = event.currentTarget
+  const status = form.querySelector('#publish-status')
+  const button = form.querySelector('button')
   event.preventDefault()
   if (button.disabled) return
 
@@ -48,4 +79,4 @@ form.addEventListener('submit', async event => {
     status.textContent = 'Could not publish the listing. ' + error.message
     button.disabled = false
   }
-})
+}

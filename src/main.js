@@ -1,4 +1,5 @@
 import './style.css'
+import { setupCreateForm } from './create.js'
 import { showProfile, showAccount } from './profile.js'
 
 const token = sessionStorage.getItem('loop.accessToken')
@@ -21,7 +22,7 @@ header.innerHTML = `
       <div class="links">
         <a href="/browse/">Browse</a>
         <a href="/how-it-works/">How it works</a>
-        <a href="${signedIn ? '/create/' : '/login/'}">Sell an item</a>
+        ${signedIn ? '<button id="sell-item" aria-haspopup="dialog">Sell an item</button>' : '<a href="/login/">Sell an item</a>'}
       </div>
       ${signedIn ? '' : `<div class="account">
           <a class="login" href="/login/">
@@ -108,6 +109,7 @@ async function loadProfile() {
 }
 
 if (signedIn) {
+  setupCreateForm()
   document.querySelector('#logout').addEventListener('click', () => endSession('/'))
   loadProfile()
 } else if (privateContent) {
