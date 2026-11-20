@@ -10,6 +10,16 @@
     <header></header>
     <main id="main" tabindex="-1" class="py-12">
       <h1 class="mb-4 font-serif text-4xl">Browse listings</h1>
+      <div class="mb-6 grid gap-3 sm:flex sm:items-end sm:gap-6">
+        <label class="grid gap-1 font-semibold" for="keyword">Search listings
+          <input id="keyword" type="search" placeholder="Try a bike or a desk lamp"
+            class="rounded-xl border border-[#d9ddcf] bg-white px-4 py-2 font-normal" />
+        </label>
+        <label class="flex items-center gap-2 py-2">
+          <input id="no-bids" type="checkbox" />
+          Only auctions with no bids
+        </label>
+      </div>
       <p id="listings-status" role="status">Loading auctions…</p>
       <div id="listings" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4"></div>
     </main>
