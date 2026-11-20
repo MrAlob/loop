@@ -7,6 +7,7 @@ export default defineConfig({
       input: [
         'index.html',
         'browse/index.html',
+        'listing/index.html',
         'how-it-works/index.html',
         'login/index.html',
         'register/index.html',

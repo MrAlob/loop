@@ -10,7 +10,9 @@ template.innerHTML = cardHtml
 function listingCard(listing) {
   const card = template.content.cloneNode(true)
 
-  card.querySelector('h3').textContent = listing.title
+  const link = card.querySelector('h3 a')
+  link.href = '/listing/?id=' + encodeURIComponent(listing.id)
+  link.textContent = listing.title
   card.querySelector('.bid-count').textContent = `Bids: ${listing._count.bids}`
 
   const time = card.querySelector('time')
