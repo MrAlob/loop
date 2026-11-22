@@ -2,6 +2,8 @@
 
 A student-to-student auction platform built for **Noroff Semester Project 2**.
 
+https://loop-auction.vercel.app/
+
 ## Run locally
 
 You need **Node.js 22.12+** and npm.
