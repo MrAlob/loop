@@ -1,8 +1,10 @@
 # Loop
 
+A student-to-student auction platform built for **Noroff Semester Project 2**.
+
 ## Run locally
 
-Install Node.js 22.12 or later, then clone the project and install its dependencies.
+You need **Node.js 22.12+** and npm.
 
 ```bash
 git clone https://github.com/MrAlob/loop.git
@@ -11,20 +13,59 @@ npm install
 cp .env.example .env.local
 ```
 
-For profile, listing and bidding features, set `VITE_NOROFF_API_KEY` in `.env.local` to your Noroff API key. Guests can browse without a key. Leave `VITE_NOROFF_API_URL` empty to use the default Noroff API.
+Add your Noroff API key to `.env.local` for profile, listing-management and bidding requests:
+
+```env
+VITE_NOROFF_API_KEY=your_noroff_api_key
+VITE_NOROFF_API_URL=
+```
+
+The API URL is optional and defaults to `https://v2.api.noroff.dev`. Public listings can be browsed without an API key. Keep `.env.local` out of Git; variables starting with `VITE_` are included in the browser build, so do not put private secrets in them.
+
+Start the development server:
 
 ```bash
 npm run dev
 ```
 
-Open the local URL printed in the terminal. To check the production version, run `npm run build` followed by `npm run preview`.
+Open the URL shown in the terminal. To check the production build locally:
+
+```bash
+npm run build
+npm run preview
+```
 
 ## About Loop
 
-Loop is a student auction site for giving pre-loved items a second life. It was built for Noroff Semester Project 2 with HTML, vanilla JavaScript, Tailwind CSS and Vite. Listings, profiles and bids come from the Noroff Auction House API.
+Loop gives pre-loved items another chance by helping students buy and sell through auctions. Instead of real-money payments, bidding uses credits provided by the Noroff Auction House API v2. The aim is a simple marketplace where useful things can keep moving between students.
 
-## Using Loop
+## How to use Loop
 
-- **Browse as a guest.** Search for an item, filter by category or sort by closing time. Open a listing to see its photos, deadline and bid history.
-- **Bid with credits.** Register with an `@stud.noroff.no` email and log in. Open another student’s active listing and enter a bid above the current price and within your available balance.
-- **Sell an item.** Choose **Sell an item**, add photos and a description, set a deadline and publish. Your profile shows your balance, your listings and the auctions you’ve bid on. Open one of your own listings to edit or delete it.
+- **Explore:** Browse active auctions without logging in. Search by keyword, filter by category, sort by ending soon or newest, and open a listing to view its photos, seller, deadline and bid history.
+- **Join and bid:** Register with an `@stud.noroff.no` email, then log in. Bid on another student's active listing if you have enough credits. You cannot bid on your own auction.
+- **Sell:** Select **Sell an item**, enter a title, description, category, image URLs and an end date, then publish your auction.
+- **Manage your account:** View your credit balance, edit your profile and see your listings and bidding activity. You can edit or delete auctions you created.
+
+## Built with
+
+- **HTML and vanilla JavaScript** for the pages and application logic
+- **Tailwind CSS** for styling and responsive layouts
+- **Vite** for local development and the multi-page production build
+- **Noroff Auction House API v2** for listings, users and bids
+
+The `src/` folder contains shared JavaScript, styling and HTML fragments. Each page has its own `index.html` (for example, `browse/`, `listing/` and `profile/`), and `public/` holds static assets.
+
+## Deployment
+
+Loop can be deployed to **Vercel** using the GitHub repository and these settings:
+
+| Setting | Value |
+| --- | --- |
+| Framework | Vite |
+| Root directory | `./` |
+| Build command | `npm run build` |
+| Output directory | `dist` |
+
+Set `VITE_NOROFF_API_KEY` in the Vercel project settings before building. `VITE_NOROFF_API_URL` is only needed if you use a different API base URL. After deployment, test direct page links and the login, profile, listing and bidding flows.
+
+Add the live deployment URL here once the site has been published.
