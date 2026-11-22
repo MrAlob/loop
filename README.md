@@ -19,10 +19,9 @@ Add your Noroff API key to `.env.local` for profile, listing-management and bidd
 
 ```env
 NOROFF_API_KEY=your_noroff_api_key
-VITE_NOROFF_API_URL=
 ```
 
-The API URL is optional and defaults to `https://v2.api.noroff.dev`. Public listings can be browsed without an API key.
+Loop uses `https://v2.api.noroff.dev` for its public API requests and server-side proxy. Public listings can be browsed without an API key.
 
 Start the development server:
 
@@ -70,5 +69,5 @@ Loop can be deployed to **Vercel** using the GitHub repository and these setting
 | Build command | `npm run build` |
 | Output directory | `dist` |
 
-Add `NOROFF_API_KEY` under **Vercel Project Settings → Environment Variables**, for both Production and Preview. The `api/noroff.js` function adds this key to authenticated requests on the server; it is not included in the browser build. Leave `VITE_NOROFF_API_URL` empty unless you intentionally change the public API URL. 
+Add `NOROFF_API_KEY` under **Vercel Project Settings → Environment Variables**, for both Production and Preview. The `api/noroff.js` function adds this key to authenticated requests on the server; it is not included in the browser build. 
 
