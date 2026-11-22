@@ -16,11 +16,11 @@ cp .env.example .env.local
 Add your Noroff API key to `.env.local` for profile, listing-management and bidding requests:
 
 ```env
-VITE_NOROFF_API_KEY=your_noroff_api_key
+NOROFF_API_KEY=your_noroff_api_key
 VITE_NOROFF_API_URL=
 ```
 
-The API URL is optional and defaults to `https://v2.api.noroff.dev`. Public listings can be browsed without an API key. Keep `.env.local` out of Git; variables starting with `VITE_` are included in the browser build, so do not put private secrets in them.
+The API URL is optional and defaults to `https://v2.api.noroff.dev`. Public listings can be browsed without an API key.
 
 Start the development server:
 
@@ -34,6 +34,8 @@ Open the URL shown in the terminal. To check the production build locally:
 npm run build
 npm run preview
 ```
+
+`npm run preview` serves only the production build, not the Vercel Function. Test signed-in features with `npm run dev` or on Vercel instead.
 
 ## About Loop
 
@@ -66,6 +68,5 @@ Loop can be deployed to **Vercel** using the GitHub repository and these setting
 | Build command | `npm run build` |
 | Output directory | `dist` |
 
-Set `VITE_NOROFF_API_KEY` in the Vercel project settings before building. `VITE_NOROFF_API_URL` is only needed if you use a different API base URL. After deployment, test direct page links and the login, profile, listing and bidding flows.
+Add `NOROFF_API_KEY` under **Vercel Project Settings → Environment Variables**, for both Production and Preview. The `api/noroff.js` function adds this key to authenticated requests on the server; it is not included in the browser build. Leave `VITE_NOROFF_API_URL` empty unless you intentionally change the public API URL. 
 
-Add the live deployment URL here once the site has been published.

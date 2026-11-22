@@ -1,4 +1,4 @@
-import { PROFILES_URL } from './api.js'
+import { PROFILES_URL, privateApiUrl } from './api.js'
 import './style.css'
 import footerHtml from './footer.html?raw'
 import { setupLogin } from './login.js'
@@ -84,15 +84,14 @@ function endSession(destination) {
   location.replace(destination)
 }
 
-// Use the same session and API key for profile and bid requests.
+// Profile requests use the signed-in user token; the server adds the API key.
 async function getProfileData(path, changes, profileName = name) {
-  const response = await fetch(`${PROFILES_URL}/${encodeURIComponent(profileName)}${path}`, {
+  const response = await fetch(privateApiUrl(`${PROFILES_URL}/${encodeURIComponent(profileName)}${path}`), {
     method: changes ? 'PUT' : 'GET',
     body: changes ? JSON.stringify(changes) : undefined,
     headers: {
       ...(changes && { 'Content-Type': 'application/json' }),
       Authorization: 'Bearer ' + token,
-      'X-Noroff-API-Key': import.meta.env.VITE_NOROFF_API_KEY,
     },
   })
   if (response.status === 401) endSession('/login/')
