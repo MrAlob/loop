@@ -1,4 +1,4 @@
-import { LISTINGS_URL } from './api.js'
+import { LISTINGS_URL, privateApiUrl } from './api.js'
 import formHtml from './create-form.html?raw'
 
 export function setupCreateForm() {
@@ -77,12 +77,11 @@ export function editListing(listing) {
 }
 
 export async function listingRequest(method, path, body) {
-  const response = await fetch(LISTINGS_URL + path, {
+  const response = await fetch(privateApiUrl(LISTINGS_URL + path), {
     method,
     headers: {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + sessionStorage.getItem('loop.accessToken'),
-      'X-Noroff-API-Key': import.meta.env.VITE_NOROFF_API_KEY,
     },
     body: JSON.stringify(body),
   })

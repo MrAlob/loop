@@ -29,15 +29,27 @@ export function showAccount(profile) {
 
 function showDetails(profile) {
   document.querySelector('#profile-name').textContent = profile.name
-  document.querySelector('#profile-email').textContent = profile.email || ''
-  document.querySelector('#profile-credits').textContent = profile.credits.toLocaleString('en-US') + ' cr'
   document.querySelector('#bio').textContent = profile.bio || 'No bio yet.'
   showImage('banner', profile.banner)
   showImage('avatar', profile.avatar)
 }
 
-export async function showProfile(profile, getProfileData) {
+export async function showProfile(profile, getProfileData, visiting) {
   showDetails(profile)
+  const own = document.querySelector('#own-listings')
+  for (const listing of profile.listings) addListing(own, listing)
+  document.querySelector('#own-status').hidden = profile.listings.length > 0
+
+  if (visiting) {
+    document.querySelector('#listings-heading').textContent = profile.name + '’s listings'
+    document.querySelector('#own-status').textContent = 'No listings yet.'
+    for (const section of document.querySelectorAll('[data-owner]')) section.hidden = true
+    document.querySelector('#dashboard').classList.remove('md:grid-cols-[16rem_1fr]')
+    return
+  }
+
+  document.querySelector('#profile-email').textContent = profile.email || ''
+  document.querySelector('#profile-credits').textContent = profile.credits.toLocaleString('en-US') + ' cr'
   const dialog = document.querySelector('#settings')
   const form = document.querySelector('#profile-form')
   const error = document.querySelector('#save-error')
@@ -78,10 +90,6 @@ export async function showProfile(profile, getProfileData) {
       submit.disabled = false
     }
   }
-
-  const own = document.querySelector('#own-listings')
-  for (const listing of profile.listings) addListing(own, listing)
-  document.querySelector('#own-status').hidden = profile.listings.length > 0
 
   const status = document.querySelector('#bid-status')
   const bids = document.querySelector('#bid-listings')

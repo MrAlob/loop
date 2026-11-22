@@ -22,11 +22,19 @@ function showPhotos(listing) {
   }
 }
 
+function profileLink(name) {
+  const link = document.createElement('a')
+  link.href = '/profile/?name=' + encodeURIComponent(name)
+  link.className = 'underline'
+  link.textContent = name
+  return link
+}
+
 function showListing(listing) {
   document.title = listing.title + ' | Loop'
   document.querySelector('#title').textContent = listing.title
   document.querySelector('#description').textContent = listing.description || 'No description provided.'
-  document.querySelector('#seller').textContent = listing.seller.name
+  document.querySelector('#seller').append(profileLink(listing.seller.name))
   showPhotos(listing)
 
   const deadline = document.querySelector('#deadline')
@@ -43,7 +51,7 @@ function showListing(listing) {
   for (const bid of bids) {
     const row = document.createElement('li')
     row.className = 'py-2'
-    row.textContent = bid.bidder.name + ' · ' + bid.amount + ' cr · ' + new Date(bid.created).toLocaleString()
+    row.append(profileLink(bid.bidder.name), ' · ' + bid.amount + ' cr · ' + new Date(bid.created).toLocaleString())
     history.append(row)
   }
 

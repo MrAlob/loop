@@ -1,4 +1,4 @@
-import { PROFILES_URL } from './api.js'
+import { PROFILES_URL, privateApiUrl } from './api.js'
 import './style.css'
 import footerHtml from './footer.html?raw'
 import { setupLogin } from './login.js'
@@ -84,15 +84,14 @@ function endSession(destination) {
   location.replace(destination)
 }
 
-// Use the same session and API key for profile and bid requests.
-async function getProfileData(path, changes) {
-  const response = await fetch(`${PROFILES_URL}/${encodeURIComponent(name)}${path}`, {
+// Profile requests use the signed-in user token; the server adds the API key.
+async function getProfileData(path, changes, profileName = name) {
+  const response = await fetch(privateApiUrl(`${PROFILES_URL}/${encodeURIComponent(profileName)}${path}`), {
     method: changes ? 'PUT' : 'GET',
     body: changes ? JSON.stringify(changes) : undefined,
     headers: {
       ...(changes && { 'Content-Type': 'application/json' }),
       Authorization: 'Bearer ' + token,
-      'X-Noroff-API-Key': import.meta.env.VITE_NOROFF_API_KEY,
     },
   })
   if (response.status === 401) endSession('/login/')
@@ -106,16 +105,19 @@ async function loadProfile() {
   balance.textContent = 'Balance unavailable'
   try {
     const onProfilePage = Boolean(document.querySelector('#my-profile'))
-    const { data } = await getProfileData(onProfilePage ? '?_listings=true' : '')
+    const seller = onProfilePage && new URLSearchParams(location.search).get('name')
+    const visiting = seller && seller !== name
+    const { data } = await getProfileData(onProfilePage && !visiting ? '?_listings=true' : '')
     showAccount(data)
+    const profile = visiting ? (await getProfileData('?_listings=true', undefined, seller)).data : data
     if (privateContent) {
       document.querySelector('#session-status').textContent = ''
       privateContent.hidden = false
     }
-    if (onProfilePage) await showProfile(data, getProfileData)
+    if (onProfilePage) await showProfile(profile, getProfileData, Boolean(visiting))
   } catch {
     if (privateContent) {
-      document.querySelector('#session-status').textContent = 'Could not load your profile. Refresh to try again.'
+      document.querySelector('#session-status').textContent = 'Could not load the profile. Check the link or refresh to try again.'
     }
   }
 }
