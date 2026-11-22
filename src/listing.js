@@ -82,11 +82,11 @@ function setupBidding(listing) {
   form.onsubmit = async event => {
     event.preventDefault()
     if (button.disabled) return
-    button.disabled = true
     if (end <= new Date()) {
       message.textContent = 'This auction has ended.'
       return
     }
+    button.disabled = true
 
     message.textContent = 'Placing bid…'
     try {
